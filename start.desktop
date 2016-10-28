@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Exec=/home/butko/PycharmProjects/FM/menu.py
+Icon=/home/butko/PycharmProjects/FM/icon.svg
+Path=/home/butko/Desktop
+Name=Start
+GenericName=Get Playlist
+Comment=Get Playlist from radio statin websites
+Terminal=true
+Type=Application
+
