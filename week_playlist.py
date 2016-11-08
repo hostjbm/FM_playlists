@@ -10,6 +10,7 @@ import csv
 If need add new station firs off all add it to get url and after that to  get_playlist
 '''
 
+
 def get_week():
     # Get date of previous week
     week_dates = []
@@ -117,7 +118,6 @@ def get_playlist(address,  pl_folder, pl_file, station_):
                     continue
             return 0
 
-
         # LUX FM
         elif station_ == "lux_fm":
             import urllib.request
@@ -161,7 +161,6 @@ def get_playlist(address,  pl_folder, pl_file, station_):
 
             for j in sorted(songs):
                 csvwriter.writerow(j)
-
 
         # Unknown radio
         else:
