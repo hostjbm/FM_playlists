@@ -82,6 +82,7 @@ def MainInKey():
             week_playlist.save_playlist('kiss_fm')
             week_playlist.save_playlist('rus_radio')
             week_playlist.save_playlist('lux_fm')
+            week_playlist.save_playlist('nrj_fm')
             input("Done, press Enter to continue...")
             DoMainMenu()
         myscreen.refresh()
