@@ -181,14 +181,13 @@ def save_playlist(st):
         get_playlist(pl_url, dir_name, file_name, station)
 
 
-
 if __name__ == "__main__":
 
-    # save_playlist('rus_radio')
-    # save_playlist('hit_fm')
+    save_playlist('rus_radio')
+    save_playlist('hit_fm')
     save_playlist('kiss_fm')
-    # save_playlist('lux_fm')
-    # save_playlist('nrj_fm')
+    save_playlist('lux_fm')
+    save_playlist('nrj_fm')
 
     # print(get_url('nrj_fm'))
     # get_playlist('http://lux.fm/player/airArchive.do?filter=2016090700', 'TEST', 'test.csv', "lux_fm")
