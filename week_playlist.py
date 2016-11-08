@@ -12,7 +12,7 @@ If need add new station firs off all add it to get url and after that to  get_pl
 
 
 def get_week():
-    # Get date of previous week
+    # Get dates of previous week
     week_dates = []
     today = datetime.date.today()
     # today = datetime.date(2016, 9, 14)
