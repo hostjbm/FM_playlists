@@ -30,12 +30,22 @@ def get_url(station__):
 
     if station__ == "hit_fm":
         template = 'http://www.hitfm.ua/playlist/*.html'
+        for day in get_week():
+            urls[day] = (template.replace('*', day.strftime('%d-%m-%Y')), station__)
+        return urls
+
     elif station__ == "kiss_fm":
         template = 'http://www.kissfm.ua/playlist/*.html'
+        for day in get_week():
+            urls[day] = (template.replace('*', day.strftime('%d-%m-%Y')), station__)
+        return urls
+
     elif station__ == "rus_radio":
         template = 'http://www.rusradio.ua/playlist/*.html'
+        for day in get_week():
+            urls[day] = (template.replace('*', day.strftime('%d-%m-%Y')), station__)
+        return urls
 
-    # LUX FM
     elif station__ == 'lux_fm':
         template = 'http://www.moreradio.org/playlist_radio/radio_lux_fm/*/#H14'
         for day in get_week():
@@ -52,17 +62,12 @@ def get_url(station__):
         print("!!!!! Unknown station !!!!!!!!!!!")
         return -1
 
-    for day in get_week():
-        urls[day] = (template.replace('*', day.strftime('%d-%m-%Y')), station__)
-    return urls
-    ############################################
-
 
 def get_playlist(address,  pl_folder, pl_file, station_):
 
-    if pl_folder not in os.listdir('.'):
+    if not os.path.isdir(pl_folder):
         print('*** Make folder ', pl_folder)
-        os.mkdir(pl_folder)
+        os.makedirs(pl_folder)
 
     with open(os.path.join(pl_folder, pl_file), 'w', newline='') as csv_pl:
         print('*** Make file ', pl_file)
@@ -169,7 +174,8 @@ def save_playlist(st):
     print()
     for pl in get_url(st).items():
         file_name = pl[0].strftime('%Y-%m-%d(%a)') + pl[1][1] + '.csv'
-        dir_name = pl[1][1].upper() + '_week#' + str(pl[0].isocalendar()[1])
+        week_folder = 'Week_#' + str(pl[0].isocalendar()[1])
+        dir_name = os.path.join(week_folder, pl[1][1].upper() + '_week#' + str(pl[0].isocalendar()[1]))
         station = pl[1][1]
         pl_url = pl[1][0]
         get_playlist(pl_url, dir_name, file_name, station)
@@ -182,12 +188,7 @@ if __name__ == "__main__":
     # save_playlist('hit_fm')
     save_playlist('kiss_fm')
     # save_playlist('lux_fm')
-
-
-    # print(get_url('nrj_fm'))
     # save_playlist('nrj_fm')
 
-
-
-
+    # print(get_url('nrj_fm'))
     # get_playlist('http://lux.fm/player/airArchive.do?filter=2016090700', 'TEST', 'test.csv', "lux_fm")
