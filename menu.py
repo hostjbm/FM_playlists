@@ -11,10 +11,14 @@ PYTHONDONTWRITEBYTECODE=1
 
 Current_day = datetime.date.today().strftime('week#%W    %d-%b-%Y')
 
-def ItemMenu(station):
+def ItemMenu(stations):
     curses.endwin()
     os.system('clear')
-    week_playlist.save_playlist(station)
+    if type(stations) == tuple:
+        for station in stations:
+            week_playlist.save_playlist(station)
+    else:
+        week_playlist.save_playlist(stations)
     input("Done, press Enter to continue...")
     DoMainMenu()
 
@@ -30,7 +34,7 @@ def DoMainMenu():
     myscreen.addstr(6, 1,  "  3 - Rus radio")
     myscreen.addstr(7, 1,  "  4 - Lux FM")
     myscreen.addstr(8, 1,  "  5 - NRJ FM (P.S Need run on monday, as early as possible)")
-    myscreen.addstr(9, 1,  "  9 - All radiostation")
+    myscreen.addstr(9, 1,  "  9 - All radio station")
     myscreen.addstr(10, 1, "  0 - Exit")
     myscreen.addstr(11, 1, "========================================")
     myscreen.addstr(12, 1, "  Enter a selection: ")
@@ -58,26 +62,9 @@ def MainInKey():
         elif key == ord('5'):
             ItemMenu('nrj_fm')
 
-        # elif key == ord('4'):
-        #     myscreen.erase()
-        #     myscreen.addstr(1, 1, "========================================")
-        #     myscreen.addstr(2, 1, "    Playlist for LUX not done           ")
-        #     myscreen.addstr(3, 1, "========================================")
-        #     myscreen.addstr(10, 1, "   Press a key :")
-        #     myscreen.refresh()
-        #     myscreen.getch()
-        #     DoMainMenu()
-
         elif key == ord('9'):
-            curses.endwin()
-            os.system('clear')
-            week_playlist.save_playlist('hit_fm')
-            week_playlist.save_playlist('kiss_fm')
-            week_playlist.save_playlist('rus_radio')
-            week_playlist.save_playlist('lux_fm')
-            week_playlist.save_playlist('nrj_fm')
-            input("Done, press Enter to continue...")
-            DoMainMenu()
+            ItemMenu(('hit_fm', 'kiss_fm', 'rus_radio', 'lux_fm', 'nrj_fm',))
+
         myscreen.refresh()
 
 
