@@ -44,42 +44,6 @@ def get_url(station_name):
     return urls
 
 
-
-    # if station_name == "hit_fm":
-    #     template = 'http://www.hitfm.ua/playlist/*.html'
-    #     for day in get_week():
-    #         urls[day] = (template.replace('*', day.strftime('%d-%m-%Y')), station_name)
-    #     return urls
-    #
-    # elif station_name == "kiss_fm":
-    #     template = 'http://www.kissfm.ua/playlist/*.html'
-    #     for day in get_week():
-    #         urls[day] = (template.replace('*', day.strftime('%d-%m-%Y')), station_name)
-    #     return urls
-    #
-    # elif station_name == "rus_radio":
-    #     template = 'http://www.rusradio.ua/playlist/*.html'
-    #     for day in get_week():
-    #         urls[day] = (template.replace('*', day.strftime('%d-%m-%Y')), station_name)
-    #     return urls
-    #
-    # elif station_name == 'lux_fm':
-    #     template = 'http://www.moreradio.org/playlist_radio/radio_lux_fm/*/#H14'
-    #     for day in get_week():
-    #         urls[day] = (template.replace('*', day.strftime('%d_%B_%Y').lower()), station_name)
-    #     return urls
-    #
-    # elif station_name == 'nrj_fm':
-    #     template = 'http://nrj.ua/programs/playlist?date=*&time_start=00:00&time_stop=23:59&p=#'
-    #     for day in get_week():
-    #         urls[day] = (template.replace('*', day.strftime('%d.%m.%Y').lower()), station_name)
-    #     return urls
-    #
-    # else:
-    #     print("!!!!! Unknown station !!!!!!!!!!!")
-    #     return -1
-
-
 def get_playlist(address,  pl_folder, pl_file, station_):
 
     if not os.path.isdir(pl_folder):
