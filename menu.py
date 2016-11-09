@@ -5,15 +5,23 @@ sys.dont_write_bytecode = True
 import curses
 import week_playlist
 import os
+import datetime
 
 PYTHONDONTWRITEBYTECODE=1
 
-cls = lambda: os.system('clear')
-cls()
+Current_day = datetime.date.today().strftime('week#%W    %d-%b-%Y')
+
+def ItemMenu(station):
+    curses.endwin()
+    os.system('clear')
+    week_playlist.save_playlist(station)
+    input("Done, press Enter to continue...")
+    DoMainMenu()
 
 
 def DoMainMenu():
     myscreen.erase()
+    myscreen.addstr(0, 1,  "Current date:     " + Current_day        )
     myscreen.addstr(1, 1,  "========================================")
     myscreen.addstr(2, 1,  "           Get week playlist            ")
     myscreen.addstr(3, 1,  "========================================")
@@ -34,36 +42,21 @@ def MainInKey():
     while key != ord('0'):
         key = myscreen.getch(12, 22)
         myscreen.addch(12, 22, key)
+
         if key == ord('1'):
-            curses.endwin()
-            cls()
-            week_playlist.save_playlist('hit_fm')
-            input("Done, press Enter to continue...")
-            DoMainMenu()
+            ItemMenu('hit_fm')
+
         elif key == ord('2'):
-            curses.endwin()
-            cls()
-            week_playlist.save_playlist('kiss_fm')
-            input("Done, press Enter to continue...")
-            DoMainMenu()
+            ItemMenu('kiss_fm')
+
         elif key == ord('3'):
-            curses.endwin()
-            cls()
-            week_playlist.save_playlist('rus_radio')
-            input("Done, press Enter to continue...")
-            DoMainMenu()
+            ItemMenu('rus_radio')
+
         elif key == ord('4'):
-            curses.endwin()
-            cls()
-            week_playlist.save_playlist('lux_fm')
-            input("Done, press Enter to continue...")
-            DoMainMenu()
+            ItemMenu('lux_fm')
+
         elif key == ord('5'):
-            curses.endwin()
-            cls()
-            week_playlist.save_playlist('nrj_fm')
-            input("Done, press Enter to continue...")
-            DoMainMenu()
+            ItemMenu('nrj_fm')
 
         # elif key == ord('4'):
         #     myscreen.erase()
@@ -77,7 +70,7 @@ def MainInKey():
 
         elif key == ord('9'):
             curses.endwin()
-            cls()
+            os.system('clear')
             week_playlist.save_playlist('hit_fm')
             week_playlist.save_playlist('kiss_fm')
             week_playlist.save_playlist('rus_radio')
