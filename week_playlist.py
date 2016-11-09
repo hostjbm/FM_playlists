@@ -38,9 +38,9 @@ def get_url(station_name):
     }
 
     urls = {}
-
     for day in get_week():
-        urls[day] = (template_url[station_name][0].replace('*', day.strftime(template_url[station_name][1]).lower()), station_name)
+        urls[day] = (template_url[station_name][0].replace('*', day.strftime(template_url[station_name][1]).lower()),
+                     station_name)
     return urls
 
 
