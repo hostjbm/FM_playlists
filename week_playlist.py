@@ -26,42 +26,22 @@ def get_week():
     return week_dates
 
 
-def get_url(station__):
+def get_url(station_name):
+
+    template_url = {
+        "hit_fm"    : ('http://www.hitfm.ua/playlist/*.html', '%d-%m-%Y'),
+        "kiss_fm"   : ('http://www.kissfm.ua/playlist/*.html', '%d-%m-%Y'),
+        "rus_radio" : ('http://www.rusradio.ua/playlist/*.html', '%d-%m-%Y'),
+        'lux_fm'    : ('http://www.moreradio.org/playlist_radio/radio_lux_fm/*/#H14', '%d_%B_%Y'),
+        'nrj_fm'    : ('http://nrj.ua/programs/playlist?date=*&time_start=00:00&time_stop=23:59&p=#', '%d.%m.%Y'),
+
+    }
+
     urls = {}
 
-    if station__ == "hit_fm":
-        template = 'http://www.hitfm.ua/playlist/*.html'
-        for day in get_week():
-            urls[day] = (template.replace('*', day.strftime('%d-%m-%Y')), station__)
-        return urls
-
-    elif station__ == "kiss_fm":
-        template = 'http://www.kissfm.ua/playlist/*.html'
-        for day in get_week():
-            urls[day] = (template.replace('*', day.strftime('%d-%m-%Y')), station__)
-        return urls
-
-    elif station__ == "rus_radio":
-        template = 'http://www.rusradio.ua/playlist/*.html'
-        for day in get_week():
-            urls[day] = (template.replace('*', day.strftime('%d-%m-%Y')), station__)
-        return urls
-
-    elif station__ == 'lux_fm':
-        template = 'http://www.moreradio.org/playlist_radio/radio_lux_fm/*/#H14'
-        for day in get_week():
-            urls[day] = (template.replace('*', day.strftime('%d_%B_%Y').lower()), station__)
-        return urls
-
-    elif station__ == 'nrj_fm':
-        template = 'http://nrj.ua/programs/playlist?date=*&time_start=00:00&time_stop=23:59&p=#'
-        for day in get_week():
-            urls[day] = (template.replace('*', day.strftime('%d.%m.%Y').lower()), station__)
-        return urls
-
-    else:
-        print("!!!!! Unknown station !!!!!!!!!!!")
-        return -1
+    for day in get_week():
+        urls[day] = (template_url[station_name][0].replace('*', day.strftime(template_url[station_name][1]).lower()), station_name)
+    return urls
 
 
 def get_playlist(address,  pl_folder, pl_file, station_):
@@ -182,11 +162,11 @@ def save_playlist(st):
 
 if __name__ == "__main__":
 
-    save_playlist('rus_radio')
-    save_playlist('hit_fm')
-    save_playlist('kiss_fm')
-    save_playlist('lux_fm')
-    save_playlist('nrj_fm')
+    # save_playlist('rus_radio')
+    # save_playlist('hit_fm')
+    # save_playlist('kiss_fm')
+    # save_playlist('lux_fm')
+    # save_playlist('nrj_fm')
 
-    # print(get_url('nrj_fm'))
+    print(get_url('nrj_fm'))
     # get_playlist('http://lux.fm/player/airArchive.do?filter=2016090700', 'TEST', 'test.csv', "lux_fm")
