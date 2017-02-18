@@ -34,18 +34,19 @@ def DoMainMenu():
     myscreen.addstr(6, 1,  "  3 - Rus radio")
     myscreen.addstr(7, 1,  "  4 - Lux FM")
     myscreen.addstr(8, 1,  "  5 - NRJ FM (P.S Need run on monday, as early as possible)")
-    myscreen.addstr(9, 1,  "  9 - All radio station")
-    myscreen.addstr(10, 1, "  0 - Exit")
-    myscreen.addstr(11, 1, "========================================")
-    myscreen.addstr(12, 1, "  Enter a selection: ")
+    myscreen.addstr(9, 1,  "  6 - DJ FM")
+    myscreen.addstr(10, 1, "  9 - All radio station")
+    myscreen.addstr(11, 1, "  0 - Exit")
+    myscreen.addstr(13, 1, "========================================")
+    myscreen.addstr(14, 1, "  Enter a selection: ")
     myscreen.refresh()
 
 
 def MainInKey():
     key = 'X'
     while key != ord('0'):
-        key = myscreen.getch(12, 22)
-        myscreen.addch(12, 22, key)
+        key = myscreen.getch(14, 22)
+        myscreen.addch(14, 22, key)
 
         if key == ord('1'):
             ItemMenu('hit_fm')
@@ -62,8 +63,11 @@ def MainInKey():
         elif key == ord('5'):
             ItemMenu('nrj_fm')
 
+        elif key == ord('6'):
+            ItemMenu('dj_fm')
+
         elif key == ord('9'):
-            ItemMenu(('hit_fm', 'kiss_fm', 'rus_radio', 'lux_fm', 'nrj_fm',))
+            ItemMenu(('hit_fm', 'kiss_fm', 'rus_radio', 'lux_fm', 'nrj_fm', 'dj_fm'))
 
         myscreen.refresh()
 

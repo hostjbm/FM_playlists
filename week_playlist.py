@@ -159,7 +159,7 @@ def get_playlist(address,  pl_folder, pl_file, station_):
                     time_from_json = datetime.datetime.fromtimestamp(row['start'])
                     Time = time_from_json.strftime('%H:%M')
                     Title = row['name'].encode('iso-8859-1').decode('UTF-8')
-                    print(Time, Title)
+                    # print(Time, Title)
                     # if in title '-' more then one. They will go to song name
                     Artist, *S = Title.split(' - ')
                     Song = S[0] if len(S) == 1 else ' - '.join(S)
