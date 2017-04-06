@@ -6,7 +6,7 @@ import lxml.html as html
 import os
 import csv
 import json
-
+#from collections import OrderedDict
 
 '''
 If need add new station firs off all add it to get url and after that to  get_playlist
@@ -153,12 +153,14 @@ def get_playlist(address,  pl_folder, pl_file, station_):
                 print('*** Get html page ', addr)
                 page = html.parse(addr)
                 pl = json.loads(page.getroot().text_content())
-                pl.reverse()
+                # from dict to list and reverse sorting
+                pl = [i for i in list(pl.items()) if i[0].isdigit()]
+                pl.sort(key=lambda x: int(x[0]), reverse=True)
+
                 for row in pl:
-                    # print(row)
-                    time_from_json = datetime.datetime.fromtimestamp(row['start'])
+                    time_from_json = datetime.datetime.fromtimestamp(row[1]['start'])
                     Time = time_from_json.strftime('%H:%M')
-                    Title = row['name'].encode('iso-8859-1').decode('UTF-8')
+                    Title = row[1]['name'].encode('iso-8859-1').decode('UTF-8')
                     # print(Time, Title)
                     # if in title '-' more then one. They will go to song name
                     Artist, *S = Title.split(' - ')
@@ -186,11 +188,11 @@ def save_playlist(st):
 
 if __name__ == "__main__":
 
-    save_playlist('rus_radio')
-    save_playlist('hit_fm')
-    save_playlist('kiss_fm')
-    save_playlist('lux_fm')
-    save_playlist('nrj_fm')
+    #save_playlist('rus_radio')
+    #save_playlist('hit_fm')
+    #save_playlist('kiss_fm')
+    #save_playlist('lux_fm')
+    #save_playlist('nrj_fm')
     save_playlist('dj_fm')
 
     # print(get_url('dj_fm'))
