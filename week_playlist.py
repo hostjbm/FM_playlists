@@ -188,11 +188,11 @@ def save_playlist(st):
 
 if __name__ == "__main__":
 
-    #save_playlist('rus_radio')
-    #save_playlist('hit_fm')
-    #save_playlist('kiss_fm')
-    #save_playlist('lux_fm')
-    #save_playlist('nrj_fm')
+    save_playlist('rus_radio')
+    save_playlist('hit_fm')
+    save_playlist('kiss_fm')
+    save_playlist('lux_fm')
+    save_playlist('nrj_fm')
     save_playlist('dj_fm')
 
     # print(get_url('dj_fm'))
