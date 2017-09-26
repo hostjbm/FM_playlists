@@ -90,16 +90,20 @@ def get_playlist(address,  pl_folder, pl_file, station_):
         elif station_ == "rus_radio":
             print('*** Get html page ', address)
             page = html.parse(urlopen(address))
+            #print(page.getroot().text_content())
             l = page.getroot()
-            for i in range(0, 330):
+            for j in l.find_class('fd'):
                 try:
-                    song = l.get_element_by_id('ss' + str(i))
-                    Time = song.find_class('blue-date').pop().text_content()
-                    Artist = song.find_class('artist').pop().text_content().replace('\n', '')
-                    Song = song.find_class('song_playlist').pop().text_content().replace('\n', '')
+                    Time = j.text_content().strip()
+                    id = j.getchildren().pop().get('id')
+                    id = id[1:] # del first char in Time id 
+                    #print(Time, id)
+                    Artist = l.get_element_by_id(id).find_class('artist').pop().text_content()
+                    Song = l.get_element_by_id(id).find_class('song_playlist').pop().text_content()
                     csvwriter.writerow((Time, Artist, Song))
                 except KeyError:
                     continue
+
             return 0
 
         # LUX FM
