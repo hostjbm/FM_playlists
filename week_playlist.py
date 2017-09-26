@@ -6,6 +6,7 @@ import lxml.html as html
 import os
 import csv
 import json
+from urllib.request import urlopen
 #from collections import OrderedDict
 
 '''
@@ -31,9 +32,9 @@ def get_week():
 def get_url(station_name):
 
     template_url = {
-        "hit_fm"    : ('http://www.hitfm.ua/playlist/*.html', '%d-%m-%Y'),
+        "hit_fm"    : ('https://www.hitfm.ua/playlist/*.html', '%d-%m-%Y'),
         "kiss_fm"   : ('http://www.kissfm.ua/playlist/*.html', '%d-%m-%Y'),
-        "rus_radio" : ('http://www.rusradio.ua/playlist/*.html', '%d-%m-%Y'),
+        "rus_radio" : ('https://www.rusradio.ua/playlist/*.html', '%d-%m-%Y'),
         'lux_fm'    : ('http://www.moreradio.org/playlist_radio/radio_lux_fm/*/#H14', '%d_%B_%Y'),
         'nrj_fm'    : ('http://nrj.ua/programs/playlist?date=*&time_start=00:00&time_stop=23:59&p=#', '%d.%m.%Y'),
         'dj_fm'     : ('http://radioscope.in.ua/paging.php?s=djfm&date=*', '%Y/%m/%d/#')
@@ -60,7 +61,7 @@ def get_playlist(address,  pl_folder, pl_file, station_):
         # HIT FM
         if station_ == 'hit_fm':
             print('*** Get html page ', address)
-            page = html.parse(address)
+            page = html.parse(urlopen(address))
             l = page.getroot().find_class('song-list')
             for i in l:
                 Time = i.find_class('songTime').pop().text_content()
@@ -88,7 +89,7 @@ def get_playlist(address,  pl_folder, pl_file, station_):
         # Russ RADIO
         elif station_ == "rus_radio":
             print('*** Get html page ', address)
-            page = html.parse(address)
+            page = html.parse(urlopen(address))
             l = page.getroot()
             for i in range(0, 330):
                 try:
