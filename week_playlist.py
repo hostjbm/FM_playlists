@@ -38,7 +38,8 @@ def get_url(station_name):
         # 'lux_fm'    : ('http://www.moreradio.org/playlist_radio/radio_lux_fm/*/#H14', '%d_%B_%Y'),
         'lux_fm':    ('http://dancemelody.ru/plsajax/ajaxpost.php?*', '%Y-%m-%d'),
         'nrj_fm'    : ('http://nrj.ua/programs/playlist?date=*&time_start=00:00&time_stop=23:59&p=#', '%d.%m.%Y'),
-        'dj_fm'     : ('http://radioscope.in.ua/paging.php?s=djfm&date=*', '%Y/%m/%d/#')
+        'dj_fm'     : ('http://radioscope.in.ua/paging.php?s=djfm&date=*', '%Y/%m/%d/#'),
+        'power_fm': ('http://radioscope.in.ua/paging.php?s=powerfm&date=*', '%Y/%m/%d/#'),
 
     }
 
@@ -192,6 +193,35 @@ def get_playlist(address,  pl_folder, pl_file, station_):
 
                     csvwriter.writerow((Time, Artist, Song))
 
+
+
+
+
+
+        # POWER_FM
+        elif station_ == "power_fm":
+        # make url for each hour
+            for i in range(1, 24, 2):
+                addr = address.replace('#', str(i))
+                print('*** Get html page ', addr)
+                page = html.parse(addr)
+                pl = json.loads(page.getroot().text_content())
+                # from dict to list and reverse sorting
+                pl = [i for i in list(pl.items()) if i[0].isdigit()]
+                pl.sort(key=lambda x: int(x[0]), reverse=True)
+
+                for row in pl:
+                    time_from_json = datetime.datetime.fromtimestamp(row[1]['start'])
+                    Time = time_from_json.strftime('%H:%M')
+                    Title = row[1]['name'].encode('iso-8859-1').decode('UTF-8')
+                    # print(Time, Title)
+                    # if in title '-' more then one. They will go to song name
+                    Artist, *S = Title.split(' - ')
+                    Song = S[0] if len(S) == 1 else ' - '.join(S)
+
+                    csvwriter.writerow((Time, Artist, Song))
+
+
         # Unknown radio
         else:
             return -1
@@ -218,6 +248,7 @@ if __name__ == "__main__":
     save_playlist('lux_fm')
     save_playlist('nrj_fm')
     save_playlist('dj_fm')
+    save_playlist('power_fm')
 
     # print(get_url('dj_fm'))
     # get_playlist('http://lux.fm/player/airArchive.do?filter=2016090700', 'TEST', 'test.csv', "lux_fm")
