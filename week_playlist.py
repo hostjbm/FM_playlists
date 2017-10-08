@@ -124,7 +124,7 @@ def get_playlist(address,  pl_folder, pl_file, station_):
                     Time = pls_item.split(' - ')[-2].strip()[:5]
                     Song = pls_item.split(' - ')[-2].strip()[8:]
                     # print(Time, Artist, '-', Song)
-                    csvwriter.writerow((Time, Artist, Song))
+                    csvwriter.writerow((Time, Artist.title(), Song.title()))
 
             # From MORERADIO
 
