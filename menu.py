@@ -35,7 +35,7 @@ def DoMainMenu():
     myscreen.addstr(7, 1,  "  4 - Lux FM")
     myscreen.addstr(8, 1,  "  5 - NRJ FM (P.S Need run on monday, as early as possible)")
     myscreen.addstr(9, 1,  "  6 - DJ FM")
-    myscreen.addstr(10, 1, "  7 - POWERFM")
+    myscreen.addstr(10, 1, "  7 - POWER FM")
     myscreen.addstr(11, 1, "  9 - All radio station")
     myscreen.addstr(12, 1, "  0 - Exit")
     myscreen.addstr(14, 1, "========================================")
