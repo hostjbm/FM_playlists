@@ -35,7 +35,8 @@ def get_url(station_name):
         "hit_fm"    : ('https://www.hitfm.ua/playlist/*.html', '%d-%m-%Y'),
         "kiss_fm"   : ('http://www.kissfm.ua/playlist/*.html', '%d-%m-%Y'),
         "rus_radio" : ('https://www.rusradio.ua/playlist/*.html', '%d-%m-%Y'),
-        'lux_fm'    : ('http://www.moreradio.org/playlist_radio/radio_lux_fm/*/#H14', '%d_%B_%Y'),
+        # 'lux_fm'    : ('http://www.moreradio.org/playlist_radio/radio_lux_fm/*/#H14', '%d_%B_%Y'),
+        'lux_fm':    ('http://dancemelody.ru/plsajax/ajaxpost.php?*', '%Y-%m-%d'),
         'nrj_fm'    : ('http://nrj.ua/programs/playlist?date=*&time_start=00:00&time_stop=23:59&p=#', '%d.%m.%Y'),
         'dj_fm'     : ('http://radioscope.in.ua/paging.php?s=djfm&date=*', '%Y/%m/%d/#')
 
@@ -109,26 +110,44 @@ def get_playlist(address,  pl_folder, pl_file, station_):
         # LUX FM
         elif station_ == "lux_fm":
             import urllib.request
-
+            import urllib.parse
             print('*** Get html page ', address)
-            opener = urllib.request.build_opener()
-            opener.addheaders.append(('Cookie', 'AllTrackRadio=563'))
-            f = opener.open(address)
-            page = html.parse(f)
-            l = page.getroot().find_class('plItemGrey')
-            for i in l:
-                try:
-                    Time = i.find_class('time').pop().text_content().strip()
-                    Title = i.find_class('MiddleBlack').pop().text_content()
-                    Song = i.find_class('MiddleBlack').pop().text
-
-                    Time = Time[:2] + ':' + Time[2:]
-                    Artist = Title.replace(Song, '')
-
-                    # print(Time, Artist, Song)
+            data = urllib.parse.urlencode({'search_term': address.split('?')[1], 'pls': 'songs89'})
+            data = data.encode('ascii')
+            with urllib.request.urlopen(address.split('?')[0], data) as f:
+                page = html.parse(f)
+                l = page.getroot().text_content()
+                pls = [i.strip() for i in l.splitlines() if i.strip()]
+                for pls_item in pls:
+                    # print(pls_item)
+                    Artist = pls_item.split(' - ')[-1].strip()
+                    Time = pls_item.split(' - ')[-2].strip()[:5]
+                    Song = pls_item.split(' - ')[-2].strip()[8:]
+                    # print(Time, Artist, '-', Song)
                     csvwriter.writerow((Time, Artist, Song))
-                except IndexError:
-                    continue
+
+            # From MORERADIO
+
+            # import urllib.request
+            # print('*** Get html page ', address)
+            # opener = urllib.request.build_opener()
+            # opener.addheaders.append(('Cookie', 'AllTrackRadio=563'))
+            # f = opener.open(address)
+            # page = html.parse(f)
+            # l = page.getroot().find_class('plItemGrey')
+            # for i in l:
+            #     try:
+            #         Time = i.find_class('time').pop().text_content().strip()
+            #         Title = i.find_class('MiddleBlack').pop().text_content()
+            #         Song = i.find_class('MiddleBlack').pop().text
+            #
+            #         Time = Time[:2] + ':' + Time[2:]
+            #         Artist = Title.replace(Song, '')
+            #
+            #         # print(Time, Artist, Song)
+            #         csvwriter.writerow((Time, Artist, Song))
+            #     except IndexError:
+            #         continue
 
         # NRJ
         elif station_ == "nrj_fm":
