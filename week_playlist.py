@@ -142,9 +142,14 @@ def get_playlist(address,  pl_folder, pl_file, station_):
                 pls = [i.strip() for i in l.splitlines() if i.strip()]
                 for pls_item in pls:
                     # print(pls_item)
-                    Artist = pls_item.split(' - ')[-1].strip()
-                    Time = pls_item.split(' - ')[-2].strip()[:5]
-                    Song = pls_item.split(' - ')[-2].strip()[8:]
+                    try:
+                        Artist = pls_item.split(' - ')[-1].strip()
+                        Time = pls_item.split(' - ')[-2].strip()[:5]
+                        Song = pls_item.split(' - ')[-2].strip()[8:]
+                    except IndexError:
+                        Artist = ""
+                        Time = ""
+                        Song = ""
                     # print(Time, Artist, '-', Song)
                     csvwriter.writerow((Time, Artist.title(), Song.title()))
 
