@@ -33,8 +33,8 @@ def get_url(station_name):
 
     template_url = {
         "hit_fm"    : ('https://www.hitfm.ua/playlist/*.html', '%d-%m-%Y'),
-        # "kiss_fm"  : ('http://www.kissfm.ua/playlist/*.html', '%d-%m-%Y'),
-        'kiss_fm'   : ('http://dancemelody.ru/plsajax/ajaxpost.php?*', '%Y-%m-%d'),
+        "kiss_fm"  : ('https://www.kissfm.ua/playlist/*.html', '%d-%m-%Y'),
+        # 'kiss_fm'   : ('http://dancemelody.ru/plsajax/ajaxpost.php?*', '%Y-%m-%d'),
         "rus_radio" : ('https://www.rusradio.ua/playlist/*.html', '%d-%m-%Y'),
         # 'lux_fm'   : ('http://www.moreradio.org/playlist_radio/radio_lux_fm/*/#H14', '%d_%B_%Y'),
         'lux_fm'    : ('http://dancemelody.ru/plsajax/ajaxpost.php?*', '%Y-%m-%d'),
@@ -117,29 +117,46 @@ def get_playlist(address,  pl_folder, pl_file, station_):
                     # print(Time, Artist, '-', Song)
                     csvwriter.writerow((Time, Artist.title(), Song.title()))
 
-        # Kiss FM from http://dancemelody.ru
+#        # Kiss FM from http://dancemelody.ru
+#        elif station_ == "kiss_fm":
+#            import urllib.request
+#            import urllib.parse
+#            print('*** Get html page ', address)
+#            data = urllib.parse.urlencode({'search_term': address.split('?')[1], 'pls': 'songs4'})
+#            data = data.encode('ascii')
+#            with urllib.request.urlopen(address.split('?')[0], data) as f:
+#                page = html.parse(f)
+#                l = page.getroot().text_content()
+#                pls = [i.strip() for i in l.splitlines() if i.strip()]
+#                for pls_item in pls:
+#                    # print(pls_item)
+#                    try:
+#                        Artist = pls_item.split(' - ')[-1].strip()
+#                        Time = pls_item.split(' - ')[-2].strip()[:5]
+#                        Song = pls_item.split(' - ')[-2].strip()[8:]
+#                    except IndexError:
+#                        Artist = ""
+#                        Time = ""
+#                        Song = ""
+#                    # print(Time, Artist, '-', Song)
+#                    csvwriter.writerow((Time, Artist.title(), Song.title()))
+        # KISS FM
         elif station_ == "kiss_fm":
-            import urllib.request
-            import urllib.parse
             print('*** Get html page ', address)
-            data = urllib.parse.urlencode({'search_term': address.split('?')[1], 'pls': 'songs4'})
-            data = data.encode('ascii')
-            with urllib.request.urlopen(address.split('?')[0], data) as f:
-                page = html.parse(f)
-                l = page.getroot().text_content()
-                pls = [i.strip() for i in l.splitlines() if i.strip()]
-                for pls_item in pls:
-                    # print(pls_item)
-                    try:
-                        Artist = pls_item.split(' - ')[-1].strip()
-                        Time = pls_item.split(' - ')[-2].strip()[:5]
-                        Song = pls_item.split(' - ')[-2].strip()[8:]
-                    except IndexError:
-                        Artist = ""
-                        Time = ""
-                        Song = ""
-                    # print(Time, Artist, '-', Song)
-                    csvwriter.writerow((Time, Artist.title(), Song.title()))
+            try:
+                page = html.parse(urlopen(address))
+                l = page.getroot().find_class('playlist-item')
+                for i in l:
+                    Time = i.find_class('songTime').pop().text_content()
+                    Artist = i.find_class('artist').pop().text_content().replace('\n', '')
+                    Song = i.find_class('song').pop().text_content().replace('\n', '')
+                    csvwriter.writerow((Time, Artist, Song))
+            except OSError:
+                print('!!! Error get ', address)
+                csvwriter.writerow(('!!! Error get ' + address, ''))
+            return 0
+
+
 
         # NRJ
         elif station_ == "nrj_fm":
