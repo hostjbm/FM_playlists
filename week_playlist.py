@@ -77,21 +77,6 @@ def get_playlist(address,  pl_folder, pl_file, station_):
                 csvwriter.writerow((Time, Artist, Song))
             return 0
 
-        # # KISS FM
-        # elif station_ == "kiss_fm":
-        #     print('*** Get html page ', address)
-        #     try:
-        #         page = html.parse(address)
-        #         l = page.getroot().find_class('playlist-item')
-        #         for i in l:
-        #             Time = i.find_class('songTime').pop().text_content()
-        #             Artist = i.find_class('artist').pop().text_content().replace('\n', '')
-        #             Song = i.find_class('song').pop().text_content().replace('\n', '')
-        #             csvwriter.writerow((Time, Artist, Song))
-        #     except OSError:
-        #         print('!!! Error get ', address)
-        #         csvwriter.writerow(('!!! Error get ' + address, ''))
-        #     return 0
 
         # Russ RADIO
         elif station_ == "rus_radio":
@@ -179,17 +164,25 @@ def get_playlist(address,  pl_folder, pl_file, station_):
 
         # MAXIMUM_FM
         elif station_ == "maximum_fm":
-            print('*** Get html page ', address)
-            page = html.parse(urlopen(address))
-            pl = json.loads(page.getroot().text_content())
-            # print(pl)
-            for row in pl['playlist']:
-                # print(row.keys())
-                Time = datetime.datetime.fromtimestamp(row['onAirDate']).strftime('%Y-%m-%d %H:%M')
-                Artist = row['artists'][0]['name']
-                Song = row['name']
+            for hours in (('00:00', '07:00'),
+                                ('07:00', '11:00'),
+                                ('11:00', '15:00'),
+                                ('15:00', '21:00'),
+                                ('21:00', '23:59')):
+                addr = address.replace('00:00', hours[0]).replace('23:59', hours[1])
+                print('*** Get html page ', addr)
+                page = html.parse(urlopen(addr))
+                pl = json.loads(page.getroot().text_content())
+                # print(pl)
+                if not pl['playlist']:
+                    continue
+                for row in pl['playlist']:
+                    # print(row.keys())
+                    Time = datetime.datetime.fromtimestamp(row['onAirDate']).strftime('%Y-%m-%d %H:%M')
+                    Artist = row['artists'][0]['name']
+                    Song = row['name']
 
-                csvwriter.writerow((Time, Artist, Song))
+                    csvwriter.writerow((Time, Artist, Song))
 
         # DJ_FM
         elif station_ == "dj_fm":
