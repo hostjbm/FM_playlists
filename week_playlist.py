@@ -44,7 +44,7 @@ def get_url(station_name):
         # 'maximum_fm': ('http://radioscope.in.ua/paging.php?s=maximum&date=*', '%Y/%m/%d/#'),
         'dj_fm'     : ('http://dancemelody.ru/plsajax/ajaxpost.php?*', '%Y-%m-%d'),
         'power_fm'  : ('http://dancemelody.ru/plsajax/ajaxpost.php?*', '%Y-%m-%d'),
-        'maximum_fm': ('https://maximum.fm/get-more-archive/7/*%2000:00/*%2023:59', '%Y-%m-%d'),
+        'maximum_fm': ('https://maximum.fm/get-more-archive/4/*%2000:00/*%2023:59', '%Y-%m-%d'),
 
     }
 
@@ -176,63 +176,18 @@ def get_playlist(address,  pl_folder, pl_file, station_):
             for j in sorted(songs):
                 csvwriter.writerow(j)
 
-        # # DJ_FM
-        # elif station_ == "dj_fm":
-        #     # make url for each hour
-        #     for i in range(1, 24, 2):
-        #         addr = address.replace('#', str(i))
-        #         print('*** Get html page ', addr)
-        #         page = html.parse(addr)
-        #         pl = json.loads(page.getroot().text_content())
-        #         # from dict to list and reverse sorting
-        #         pl = [i for i in list(pl.items()) if i[0].isdigit()]
-        #         pl.sort(key=lambda x: int(x[0]), reverse=True)
-        #
-        #         for row in pl:
-        #             time_from_json = datetime.datetime.fromtimestamp(row[1]['start'])
-        #             Time = time_from_json.strftime('%H:%M')
-        #             Title = row[1]['name'].encode('iso-8859-1').decode('UTF-8')
-        #             # print(Time, Title)
-        #             # if in title '-' more then one. They will go to song name
-        #             Artist, *S = Title.split(' - ')
-        #             Song = S[0] if len(S) == 1 else ' - '.join(S)
-        #
-        #             csvwriter.writerow((Time, Artist, Song))
-        #
-        # # POWER_FM
-        # elif station_ == "power_fm":
-        # # make url for each hour
-        #     for i in range(1, 24, 2):
-        #         addr = address.replace('#', str(i))
-        #         print('*** Get html page ', addr)
-        #         page = html.parse(addr)
-        #         pl = json.loads(page.getroot().text_content())
-        #         # from dict to list and reverse sorting
-        #         pl = [i for i in list(pl.items()) if i[0].isdigit()]
-        #         pl.sort(key=lambda x: int(x[0]), reverse=True)
-        #
-        #         for row in pl:
-        #             time_from_json = datetime.datetime.fromtimestamp(row[1]['start'])
-        #             Time = time_from_json.strftime('%H:%M')
-        #             Title = row[1]['name'].encode('iso-8859-1').decode('UTF-8')
-        #             # print(Time, Title)
-        #             # if in title '-' more then one. They will go to song name
-        #             Artist, *S = Title.split(' - ')
-        #             Song = S[0] if len(S) == 1 else ' - '.join(S)
-        #
-        #             csvwriter.writerow((Time, Artist, Song))
 
         # MAXIMUM_FM
         elif station_ == "maximum_fm":
             print('*** Get html page ', address)
             page = html.parse(urlopen(address))
             pl = json.loads(page.getroot().text_content())
-
+            # print(pl)
             for row in pl['playlist']:
-                # print(row['startDate'], row['runTime'], row['artistName'], ' -- ', row['songName'])
-                Time = row['runTime']
-                Artist = row['artistName']
-                Song = row['songName']
+                # print(row.keys())
+                Time = datetime.datetime.fromtimestamp(row['onAirDate']).strftime('%Y-%m-%d %H:%M')
+                Artist = row['artists'][0]['name']
+                Song = row['name']
 
                 csvwriter.writerow((Time, Artist, Song))
 
@@ -287,4 +242,5 @@ if __name__ == "__main__":
     save_playlist('dj_fm')
     save_playlist('power_fm')
     save_playlist('maximum_fm')
+
     save_playlist('rus_radio')
