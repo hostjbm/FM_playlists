@@ -250,7 +250,7 @@ def get_playlist(address,  pl_folder, pl_file, station_):
         # POWER_FM
         elif station_ == "power_fm":
             import urllib.parse
-            from urllib.request import Request, urlopen
+            from urllib.request import Request
 
             print('*** Get html page ', address)
             data_day = address.split('?')[1]
