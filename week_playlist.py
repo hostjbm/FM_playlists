@@ -44,7 +44,8 @@ def get_url(station_name):
         # 'power_fm'  : ('http://radioscope.in.ua/paging.php?s=powerfm&date=*', '%Y/%m/%d/#'),
         # 'maximum_fm': ('http://radioscope.in.ua/paging.php?s=maximum&date=*', '%Y/%m/%d/#'),
         'dj_fm'     : ('http://dancemelody.ru/plsajax/ajaxpost.php?*', '%Y-%m-%d'),
-        'power_fm'  : ('http://dancemelody.ru/plsajax/ajaxpost.php?*', '%Y-%m-%d'),
+        # 'power_fm'  : ('http://dancemelody.ru/plsajax/ajaxpost.php?*', '%Y-%m-%d'),
+        'power_fm'  : ('https://radiovolna.net/radio_stations/stations/by-day.html?*', '%Y-%m-%d'),
         'maximum_fm': ('https://maximum.fm/get-more-archive/4/*%2000:00/*%2023:59', '%Y-%m-%d'),
 
     }
@@ -245,6 +246,55 @@ def get_playlist(address,  pl_folder, pl_file, station_):
                         Song = ""
                     # print(Time, Artist, '-', Song)
                     csvwriter.writerow((Time, Artist.title(), Song.title()))
+
+        # POWER_FM
+        elif station_ == "power_fm":
+            import urllib.parse
+            from urllib.request import Request, urlopen
+
+            print('*** Get html page ', address)
+            data_day = address.split('?')[1]
+            url_addr = address.split('?')[0]
+            data = urllib.parse.urlencode({'stationId': '14', 'day': data_day}).encode('ascii')
+            ques = Request(url_addr, data=data, headers={ 'X-Requested-With': 'XMLHttpRequest'})
+
+            with urlopen(ques) as f:
+                pl = json.loads((f.read()).decode('utf8'))
+                # print(pl)
+                if pl['data']:
+                    page = html.document_fromstring(pl['data'])
+                    for row in page.find_class('item'):
+                        # print(html.tostring(row))
+                        Time = row.find_class('time').pop().text_content()
+                        Title = row.find_class('item-title').pop().text_content().strip()
+                        Artist = Title.split('-')[0].strip()
+                        Song = Title.split('-')[1].strip()
+
+                        csvwriter.writerow((Time, Artist.title(), Song.title()))
+                else:
+                    csvwriter.writerow(('No data on site',))
+
+
+
+                # page = html.parse(f)
+                # l = page.getroot().text_content()
+                # print(l)
+            #     pls = [i.strip() for i in l.splitlines() if i.strip()]
+            #     for pls_item in pls:
+            #         # print(pls_item)
+            #         try:
+            #             Artist = pls_item.split(' - ')[-1].strip()
+            #             Time = pls_item.split(' - ')[-2].strip()[:5]
+            #             Song = pls_item.split(' - ')[-2].strip()[8:]
+            #         except IndexError:
+            #             Artist = ""
+            #             Time = ""
+            #             Song = ""
+            #         # print(Time, Artist, '-', Song)
+            #         csvwriter.writerow((Time, Artist.title(), Song.title()))
+
+
+
 
         # Unknown radio
         else:
