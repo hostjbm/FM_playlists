@@ -6,7 +6,8 @@ import lxml.html as html
 import os
 import csv
 import json
-from urllib.request import urlopen
+from urllib.request import urlopen, Request as URL_Request
+
 #from collections import OrderedDict
 
 '''
@@ -210,7 +211,9 @@ def get_playlist(address,  pl_folder, pl_file, station_):
                                 ('21:00', '23:59')):
                 addr = address.replace('00:00', hours[0]).replace('23:59', hours[1])
                 print('*** Get html page ', addr)
-                page = html.parse(urlopen(addr))
+                req = URL_Request(addr, headers={'User-Agent': 'Mozilla/5.0'})
+                # page = html.parse(urlopen(addr))
+                page = html.parse(urlopen(req))
                 pl = json.loads(page.getroot().text_content())
                 # print(pl)
                 if not pl['playlist']:
@@ -275,27 +278,6 @@ def get_playlist(address,  pl_folder, pl_file, station_):
                     csvwriter.writerow(('No data on site',))
 
 
-
-                # page = html.parse(f)
-                # l = page.getroot().text_content()
-                # print(l)
-            #     pls = [i.strip() for i in l.splitlines() if i.strip()]
-            #     for pls_item in pls:
-            #         # print(pls_item)
-            #         try:
-            #             Artist = pls_item.split(' - ')[-1].strip()
-            #             Time = pls_item.split(' - ')[-2].strip()[:5]
-            #             Song = pls_item.split(' - ')[-2].strip()[8:]
-            #         except IndexError:
-            #             Artist = ""
-            #             Time = ""
-            #             Song = ""
-            #         # print(Time, Artist, '-', Song)
-            #         csvwriter.writerow((Time, Artist.title(), Song.title()))
-
-
-
-
         # Unknown radio
         else:
             return -1
@@ -316,11 +298,11 @@ def save_playlist(st):
 
 if __name__ == "__main__":
 
-    save_playlist('hit_fm')
-    save_playlist('kiss_fm')
-    save_playlist('lux_fm')
-    save_playlist('nrj_fm')
-    save_playlist('dj_fm')
-    save_playlist('power_fm')
+    # save_playlist('hit_fm')
+    # save_playlist('kiss_fm')
+    # save_playlist('lux_fm')
+    # save_playlist('nrj_fm')
+    # save_playlist('dj_fm')
+    # save_playlist('power_fm')
     save_playlist('maximum_fm')
-    save_playlist('rus_radio')
+    # save_playlist('rus_radio')
