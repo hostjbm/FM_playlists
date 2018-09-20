@@ -7,7 +7,7 @@ import os
 import csv
 import json
 from urllib.request import urlopen, Request as URL_Request
-import urllib.error
+
 
 #from collections import OrderedDict
 
@@ -20,7 +20,6 @@ def get_week():
     # Get dates of previous week
     week_dates = []
     today = datetime.date.today()
-    # today = datetime.date(2016, 9, 14)
     weekday = today.weekday()
     start_delta = datetime.timedelta(days=weekday, weeks=1)
     start_of_week = today - start_delta
@@ -103,29 +102,29 @@ def get_playlist(address,  pl_folder, pl_file, station_):
 
             return 0
 
-        # # LUX FM
+        # # LUX FM from site
         # elif station_ == "lux_fm":
-        #     import urllib.request
-        #     import urllib.parse
-        #     print('*** Get html page ', address)
-        #     data = urllib.parse.urlencode({'search_term': address.split('?')[1], 'pls': 'songs89'})
-        #     data = data.encode('ascii')
-        #     with urllib.request.urlopen(address.split('?')[0], data) as f:
-        #         page = html.parse(f)
-        #         l = page.getroot().text_content()
-        #         pls = [i.strip() for i in l.splitlines() if i.strip()]
-        #         for pls_item in pls:
-        #             # print(pls_item)
-        #             Artist = pls_item.split(' - ')[-1].strip()
-        #             Time = pls_item.split(' - ')[-2].strip()[:5]
-        #             Song = pls_item.split(' - ')[-2].strip()[8:]
-        #             # print(Time, Artist, '-', Song)
-        #             csvwriter.writerow((Time, Artist.title(), Song.title()))
+        #     for start_row in (0, 100, 150, 200, 250, 300, 350, 400):
+        #         addr = address.replace('#', str(start_row))
+        #         print('*** Get html page ', addr)
+        #         page = html.parse(addr)
+        #         l = page.getroot().find_class('playlist-item')
+        #         if not l:
+        #             continue
+        #         for item in l:
+        #             Title = item.find_class('playlist-item-name').pop().text_content().strip()
+        #             Time = item.find_class('left')[0].text_content().strip()
+        #             # Decode string and split to name and artist
+        #             Title = Title.encode('ISO-8859-1').decode(encoding='utf-8', errors='ignore')
+        #             Song = Title.split('-')[0].strip()
+        #             Artist = Title.split('-')[1].strip()
+        #             # print(Time, Artist, Song)
+        #             csvwriter.writerow((Time, Artist, Song))
 
         # LUX FM from site
         elif station_ == "lux_fm":
-            for start_row in (0, 1, 2, 3, 4,):
-                addr = address.replace('#', str(start_row))
+            for period in (0, 1, 2, 3, 4,):
+                addr = address.replace('#', str(period))
                 print('*** Get html page ', addr)
                 req = URL_Request(addr, headers={'User-Agent': 'Mozilla/5.0'})
                 page = html.parse(urlopen(req))
@@ -134,36 +133,14 @@ def get_playlist(address,  pl_folder, pl_file, station_):
                 if not l:
                     continue
                 for item in l:
-                    Time = item.find_class('time')[0].text_content().strip()
+                    Time = item.find_class('time').pop().text_content().strip()
                     Song = item.find_class('song-name').pop().text_content().strip()
                     Artist = item.find_class('song-artist').pop().text_content().strip()
                     # print(Time, Artist, Song)
                     csvwriter.writerow((Time, Artist, Song))
 
 
-#        # Kiss FM from http://dancemelody.ru
-#        elif station_ == "kiss_fm":
-#            import urllib.request
-#            import urllib.parse
-#            print('*** Get html page ', address)
-#            data = urllib.parse.urlencode({'search_term': address.split('?')[1], 'pls': 'songs4'})
-#            data = data.encode('ascii')
-#            with urllib.request.urlopen(address.split('?')[0], data) as f:
-#                page = html.parse(f)
-#                l = page.getroot().text_content()
-#                pls = [i.strip() for i in l.splitlines() if i.strip()]
-#                for pls_item in pls:
-#                    # print(pls_item)
-#                    try:
-#                        Artist = pls_item.split(' - ')[-1].strip()
-#                        Time = pls_item.split(' - ')[-2].strip()[:5]
-#                        Song = pls_item.split(' - ')[-2].strip()[8:]
-#                    except IndexError:
-#                        Artist = ""
-#                        Time = ""
-#                        Song = ""
-#                    # print(Time, Artist, '-', Song)
-#                    csvwriter.writerow((Time, Artist.title(), Song.title()))
+
         # KISS FM
         elif station_ == "kiss_fm":
             print('*** Get html page ', address)
