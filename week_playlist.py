@@ -7,6 +7,7 @@ import os
 import csv
 import json
 from urllib.request import urlopen, Request as URL_Request
+import urllib.error
 
 #from collections import OrderedDict
 
@@ -39,7 +40,8 @@ def get_url(station_name):
         "rus_radio" : ('https://www.rusradio.ua/playlist/*.html', '%d-%m-%Y'),
         # 'lux_fm'   : ('http://www.moreradio.org/playlist_radio/radio_lux_fm/*/#H14', '%d_%B_%Y'),
         # 'lux_fm'    : ('http://dancemelody.ru/plsajax/ajaxpost.php?*', '%Y-%m-%d'),
-        'lux_fm': ('http://lux.fm/player/airArchive.ajx?filter=*00&startRow=#', '%Y%m%d'),
+        # 'lux_fm': ('http://lux.fm/player/airArchive.ajx?filter=*00&startRow=#', '%Y%m%d'),
+        'lux_fm': ('https://lux.fm/music/archive/get-songs-html?dateStr=*&datePeriodIndex=#', '%Y-%m-%d'),
         'nrj_fm'    : ('http://nrj.ua/programs/playlist?date=*&time_start=00:00&time_stop=23:59&p=#', '%d.%m.%Y'),
         # 'dj_fm'     : ('http://radioscope.in.ua/paging.php?s=djfm&date=*', '%Y/%m/%d/#'),
         # 'power_fm'  : ('http://radioscope.in.ua/paging.php?s=powerfm&date=*', '%Y/%m/%d/#'),
@@ -122,20 +124,19 @@ def get_playlist(address,  pl_folder, pl_file, station_):
 
         # LUX FM from site
         elif station_ == "lux_fm":
-            for start_row in (0, 100, 150, 200, 250, 300, 350, 400):
+            for start_row in (0, 1, 2, 3, 4,):
                 addr = address.replace('#', str(start_row))
                 print('*** Get html page ', addr)
-                page = html.parse(addr)
-                l = page.getroot().find_class('playlist-item')
+                req = URL_Request(addr, headers={'User-Agent': 'Mozilla/5.0'})
+                page = html.parse(urlopen(req))
+                pl = json.loads(page.getroot().text_content())
+                l = html.document_fromstring(pl['html']).find_class('song-wrapper-bg')
                 if not l:
                     continue
                 for item in l:
-                    Title = item.find_class('playlist-item-name').pop().text_content().strip()
-                    Time = item.find_class('left')[0].text_content().strip()
-                    # Decode string and split to name and artist
-                    Title = Title.encode('ISO-8859-1').decode(encoding='utf-8', errors='ignore')
-                    Song = Title.split('-')[0].strip()
-                    Artist = Title.split('-')[1].strip()
+                    Time = item.find_class('time')[0].text_content().strip()
+                    Song = item.find_class('song-name').pop().text_content().strip()
+                    Artist = item.find_class('song-artist').pop().text_content().strip()
                     # print(Time, Artist, Song)
                     csvwriter.writerow((Time, Artist, Song))
 
@@ -293,8 +294,11 @@ def save_playlist(st):
         dir_name = os.path.join(week_folder, pl[1][1].upper() + '_week#' + str(pl[0].isocalendar()[1]))
         station = pl[1][1]
         pl_url = pl[1][0]
-        get_playlist(pl_url, dir_name, file_name, station)
-
+        # Catch all exception
+        try:
+            get_playlist(pl_url, dir_name, file_name, station)
+        except Exception as my_error:
+            print(my_error)
 
 if __name__ == "__main__":
 
