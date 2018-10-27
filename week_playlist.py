@@ -79,7 +79,6 @@ def get_playlist(address,  pl_folder, pl_file, station_):
                 Artist = i.find_class('sing-name').pop().text_content().replace('\n', '')
                 Song = i.find_class('song-name').pop().text_content().replace('\n', '')
                 csvwriter.writerow((Time, Artist, Song))
-            return 0
 
 
         # Russ RADIO
@@ -100,26 +99,6 @@ def get_playlist(address,  pl_folder, pl_file, station_):
                 except KeyError:
                     continue
 
-            return 0
-
-        # # LUX FM from site
-        # elif station_ == "lux_fm":
-        #     for start_row in (0, 100, 150, 200, 250, 300, 350, 400):
-        #         addr = address.replace('#', str(start_row))
-        #         print('*** Get html page ', addr)
-        #         page = html.parse(addr)
-        #         l = page.getroot().find_class('playlist-item')
-        #         if not l:
-        #             continue
-        #         for item in l:
-        #             Title = item.find_class('playlist-item-name').pop().text_content().strip()
-        #             Time = item.find_class('left')[0].text_content().strip()
-        #             # Decode string and split to name and artist
-        #             Title = Title.encode('ISO-8859-1').decode(encoding='utf-8', errors='ignore')
-        #             Song = Title.split('-')[0].strip()
-        #             Artist = Title.split('-')[1].strip()
-        #             # print(Time, Artist, Song)
-        #             csvwriter.writerow((Time, Artist, Song))
 
         # LUX FM from site
         elif station_ == "lux_fm":
@@ -140,7 +119,6 @@ def get_playlist(address,  pl_folder, pl_file, station_):
                     csvwriter.writerow((Time, Artist, Song))
 
 
-
         # KISS FM
         elif station_ == "kiss_fm":
             print('*** Get html page ', address)
@@ -155,8 +133,6 @@ def get_playlist(address,  pl_folder, pl_file, station_):
             except OSError:
                 print('!!! Error get ', address)
                 csvwriter.writerow(('!!! Error get ' + address, ''))
-            return 0
-
 
 
         # NRJ
@@ -260,6 +236,13 @@ def get_playlist(address,  pl_folder, pl_file, station_):
         else:
             return -1
 
+        # Print how many song found
+        with open(csv_pl.name, "r") as f:
+            written_lines = len(f.readlines())
+            if written_lines <= 1:
+                print('!!!! Empty playlist!')
+            else:
+                print('**** Songs to file written = \"%d\"' % (written_lines))
 
 def save_playlist(st):
     print()
