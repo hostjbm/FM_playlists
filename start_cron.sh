@@ -9,4 +9,4 @@ find . -type d -name 'Week*' -exec rm -rf {} \;
 echo "##########################"
 echo "########## tar ###########"
 echo "##########################"
-find . -type f -name 'Week_*' -mtime 0 -exec tar -vtf {} \; | sort -n | grep -v '\/$' | awk '{print $3,$5,$6}'
+find . -type f -name 'Week_*' -mtime 0 -exec tar -vtf {} \; | awk '{print $3,$5,$6}' | sort -n | grep -v '\/$'
