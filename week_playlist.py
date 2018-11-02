@@ -242,7 +242,7 @@ def get_playlist(address,  pl_folder, pl_file, station_):
             if written_lines <= 1:
                 print('!!!! Empty playlist!')
             else:
-                print('**** Songs to file written = \"%d\"' % (written_lines))
+                print('**** Songs written to file = \"%d\"' % (written_lines))
 
 def save_playlist(st):
     print()
