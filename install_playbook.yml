@@ -1,0 +1,29 @@
+---
+- name: Install FM playlist script
+  hosts: all
+  vars:
+    script_folder:  "{{ ansible_env.HOME }}/Scripts/FM"
+  tasks:
+
+  - name:
+    debug: 
+      msg: "Home derectory {{ ansible_env.HOME }}"
+
+  - name: Create a directory if it does not exist
+    file:
+      path: "{{ script_folder }}"
+      state: directory
+      recurse: yes
+
+  - name: Checkout Playlist repo
+    git:
+      repo: https://github.com/hostjbm/FM_playlists
+      dest: "{{ script_folder }}"
+
+  - name: Add job to the Cron
+    cron:
+      name: "Get playlists"
+      minute: "5"
+      hour: "7"
+      weekday: "1"
+      job: "{{ script_folder }}/start_cron.sh"

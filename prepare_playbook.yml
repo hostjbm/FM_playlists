@@ -1,0 +1,28 @@
+---
+- name: Prepare host for script
+  hosts: all
+  tasks:
+
+  - name: Install python3
+    become: yes
+    apt: 
+      pkg:
+        - python3
+        - python3-pip
+        - python3-dev
+        - libxml2-dev 
+        - libxslt1-dev
+
+  - name: Install pip setuptools
+    become: yes
+    pip:
+      executable: pip3
+      name:
+      - setuptools
+  
+  - name: Install pip modules
+    become: yes
+    pip:
+      executable: pip3
+      name:
+      - lxml
