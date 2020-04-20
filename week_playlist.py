@@ -85,19 +85,14 @@ def get_playlist(address,  pl_folder, pl_file, station_):
         elif station_ == "rus_radio":
             print('*** Get html page ', address)
             page = html.parse(urlopen(address))
-            #print(page.getroot().text_content())
+            # print(page.getroot().text_content())
             l = page.getroot()
-            for j in l.find_class('fd'):
-                try:
-                    Time = j.text_content().strip()
-                    id = j.getchildren().pop().get('id')
-                    id = id[1:] # del first char in Time id 
-                    #print(Time, id)
-                    Artist = l.get_element_by_id(id).find_class('artist').pop().text_content()
-                    Song = l.get_element_by_id(id).find_class('song_playlist').pop().text_content()
-                    csvwriter.writerow((Time, Artist, Song))
-                except KeyError:
-                    continue
+            for j in l.find_class('d-flex'):
+                # print(html.tostring(j))
+                Time = j.find_class('blue-date left').pop().text_content()
+                Artist = j.find_class('artist').pop().text_content().replace('\n', '')
+                Song = j.find_class('song_playlist').pop().text_content().replace('\n', '')
+                csvwriter.writerow((Time, Artist, Song))
 
 
         # LUX FM from site
@@ -262,11 +257,11 @@ def save_playlist(st):
 
 if __name__ == "__main__":
 
-    save_playlist('hit_fm')
-    save_playlist('kiss_fm')
-    save_playlist('lux_fm')
-    save_playlist('nrj_fm')
-    save_playlist('dj_fm')
-    save_playlist('power_fm')
-    save_playlist('maximum_fm')
+    # save_playlist('hit_fm')
+    # save_playlist('kiss_fm')
+    # save_playlist('lux_fm')
+    # save_playlist('nrj_fm')
+    # save_playlist('dj_fm')
+    # save_playlist('power_fm')
+    # save_playlist('maximum_fm')
     save_playlist('rus_radio')
