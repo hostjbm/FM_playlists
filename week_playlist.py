@@ -257,11 +257,11 @@ def save_playlist(st):
 
 if __name__ == "__main__":
 
-    # save_playlist('hit_fm')
-    # save_playlist('kiss_fm')
-    # save_playlist('lux_fm')
-    # save_playlist('nrj_fm')
-    # save_playlist('dj_fm')
-    # save_playlist('power_fm')
-    # save_playlist('maximum_fm')
+    save_playlist('hit_fm')
+    save_playlist('kiss_fm')
+    save_playlist('lux_fm')
+    save_playlist('nrj_fm')
+    save_playlist('dj_fm')
+    save_playlist('power_fm')
+    save_playlist('maximum_fm')
     save_playlist('rus_radio')
