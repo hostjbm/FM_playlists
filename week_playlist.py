@@ -40,7 +40,7 @@ def get_url(station_name):
         'lux_fm': ('https://lux.fm/music/archive/get-songs-html?dateStr=*&datePeriodIndex=#', '%Y-%m-%d'),
         'nrj_fm'    : ('https://nrj.ua/programs/playlist?date=*&time_start=00:00&time_stop=23:59&p=#', '%d.%m.%Y'),
         # 'dj_fm'     : ('http://radioscope.in.ua/paging.php?s=djfm&date=*', '%Y/%m/%d/#'),
-        'dj_fm'     : ('http://dancemelody.ru/plsajax/ajaxpost.php?*', '%Y-%m-%d'),
+        'dj_fm'     : ('https://dancemelody.ru/plsajax/ajaxpost.php?*', '%Y-%m-%d'),
         'power_fm'  : ('https://radiovolna.net/radio_stations/stations/by-day.html?*', '%Y-%m-%d'),
         'maximum_fm': ('https://maximum.fm/get-more-archive/4/*%2000:00/*%2023:59', '%Y-%m-%d'),
 
