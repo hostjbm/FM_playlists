@@ -75,7 +75,7 @@ def get_playlist(address,  pl_folder, pl_file, station_):
             page = html.parse(urlopen(address))
             l = page.getroot().find_class('song-list')
             for i in l:
-                Time = i.find_class('songTime').pop().text_content()
+                Time = i.find_class('stl-absolute date-podcast').pop().text_content()
                 Artist = i.find_class('sing-name').pop().text_content().replace('\n', '')
                 Song = i.find_class('song-name').pop().text_content().replace('\n', '')
                 csvwriter.writerow((Time, Artist, Song))
