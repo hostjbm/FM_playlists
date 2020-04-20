@@ -4,7 +4,7 @@
 cd $(dirname $0)
 /usr/bin/python3 week_playlist.py
 
-find . -type d -name 'Week*' -exec tar -cvfz {}.tar.gz {} \;
+find . -type d -name 'Week*' -exec tar -zcvf {}.tar.gz {} \;
 find . -type d -name 'Week*' -exec rm -rf {} \;
 echo "#########################"
 echo "### Empty file in tar ###"
