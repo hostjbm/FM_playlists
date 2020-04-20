@@ -35,18 +35,12 @@ def get_url(station_name):
     template_url = {
         "hit_fm"    : ('https://www.hitfm.ua/playlist/*.html', '%d-%m-%Y'),
         "kiss_fm"  : ('https://www.kissfm.ua/playlist/*.html', '%d-%m-%Y'),
-        # 'kiss_fm'   : ('http://dancemelody.ru/plsajax/ajaxpost.php?*', '%Y-%m-%d'),
         "rus_radio" : ('https://www.rusradio.ua/playlist/*.html', '%d-%m-%Y'),
         # 'lux_fm'   : ('http://www.moreradio.org/playlist_radio/radio_lux_fm/*/#H14', '%d_%B_%Y'),
-        # 'lux_fm'    : ('http://dancemelody.ru/plsajax/ajaxpost.php?*', '%Y-%m-%d'),
-        # 'lux_fm': ('http://lux.fm/player/airArchive.ajx?filter=*00&startRow=#', '%Y%m%d'),
         'lux_fm': ('https://lux.fm/music/archive/get-songs-html?dateStr=*&datePeriodIndex=#', '%Y-%m-%d'),
-        'nrj_fm'    : ('http://nrj.ua/programs/playlist?date=*&time_start=00:00&time_stop=23:59&p=#', '%d.%m.%Y'),
+        'nrj_fm'    : ('https://nrj.ua/programs/playlist?date=*&time_start=00:00&time_stop=23:59&p=#', '%d.%m.%Y'),
         # 'dj_fm'     : ('http://radioscope.in.ua/paging.php?s=djfm&date=*', '%Y/%m/%d/#'),
-        # 'power_fm'  : ('http://radioscope.in.ua/paging.php?s=powerfm&date=*', '%Y/%m/%d/#'),
-        # 'maximum_fm': ('http://radioscope.in.ua/paging.php?s=maximum&date=*', '%Y/%m/%d/#'),
         'dj_fm'     : ('http://dancemelody.ru/plsajax/ajaxpost.php?*', '%Y-%m-%d'),
-        # 'power_fm'  : ('http://dancemelody.ru/plsajax/ajaxpost.php?*', '%Y-%m-%d'),
         'power_fm'  : ('https://radiovolna.net/radio_stations/stations/by-day.html?*', '%Y-%m-%d'),
         'maximum_fm': ('https://maximum.fm/get-more-archive/4/*%2000:00/*%2023:59', '%Y-%m-%d'),
 
@@ -136,7 +130,7 @@ def get_playlist(address,  pl_folder, pl_file, station_):
             for i in range(1, 19):
                 addr = address.replace('#', str(i))
                 print('*** Get html page ', addr)
-                page = html.parse(addr)
+                page = html.parse(urlopen(addr))
                 l = page.getroot().find_class('jp_container')
                 for j in l:
                     Time = j.find_class('time').pop().text_content().strip()
@@ -145,7 +139,6 @@ def get_playlist(address,  pl_folder, pl_file, station_):
                     Song = Title.replace(Artist, '').strip()
                     if Song:
                        songs.add((Time, Artist, Song))
-                    # print(Time, Artist, Song)
 
             for j in sorted(songs):
                 csvwriter.writerow(j)
