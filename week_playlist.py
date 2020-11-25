@@ -7,6 +7,8 @@ import os
 import csv
 import json
 from urllib.request import urlopen, Request as URL_Request
+import threading
+import time
 
 
 #from collections import OrderedDict
@@ -248,13 +250,32 @@ def save_playlist(st):
         except Exception as my_error:
             print(my_error)
 
+
 if __name__ == "__main__":
 
-    save_playlist('hit_fm')
-    save_playlist('kiss_fm')
-    save_playlist('lux_fm')
-    save_playlist('nrj_fm')
-    save_playlist('dj_fm')
-    save_playlist('power_fm')
-    save_playlist('maximum_fm')
-    save_playlist('rus_radio')
+    enable_tread = True
+    start_time = time.time()
+    radio_stations = ('hit_fm',
+                     'kiss_fm',
+                     'lux_fm',
+                     'nrj_fm',
+                     'dj_fm',
+                     'power_fm',
+                     'maximum_fm',
+                     'rus_radio',
+                     )
+    threads = []
+    for station in radio_stations:
+        print('Start for station: {}'.format(station))
+        if enable_tread:
+            tr = threading.Thread(target=save_playlist, args=(station,))
+            tr.start()
+            threads.append(tr)
+        else:
+            save_playlist(station)
+
+    # join all threads
+    for tr in threads:
+        tr.join()
+
+    print("Done in : ", time.time() - start_time)
