@@ -258,16 +258,16 @@ def save_playlist(st):
 if __name__ == "__main__":
 
     enable_tread = True
-    enable_tread = False
+    # enable_tread = False
     start_time = time.time()
     radio_stations = ('hit_fm',
-                     # 'kiss_fm',
-                     # 'lux_fm',
-                     # 'nrj_fm',
-                     # 'dj_fm',
-                     # 'power_fm',
-                     # 'maximum_fm',
-                     # 'rus_radio',
+                     'kiss_fm',
+                     'lux_fm',
+                     'nrj_fm',
+                     'dj_fm',
+                     'power_fm',
+                     'maximum_fm',
+                     'rus_radio',
                      )
     threads = []
     for station in radio_stations:
