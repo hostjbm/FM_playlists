@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Exec=/home/_user_/FM_playlists/menu.py
+Icon=/home/_user_/FM_playlists/shortcut/.icon.svg
+Path=/home/_user_/FM_playlists/
+Name=Radio Playlist
+GenericName=Get Playlist
+Comment=Get Playlist from radio station websites
+Terminal=true
+Type=Application
+
