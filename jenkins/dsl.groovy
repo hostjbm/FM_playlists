@@ -13,7 +13,7 @@ job("FM_playlists") {
 	concurrentBuild(false)
 	steps {
 		shell("/usr/bin/python3 week_playlist.py")
-		shell("ls -la")
+		shell("find . -type d -name 'Week*' -exec tar -zcvf {}.tar.gz {} \;")
 	}
 	publishers {
 		archiveArtifacts {
