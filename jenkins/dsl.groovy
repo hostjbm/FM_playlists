@@ -12,7 +12,8 @@ job("FM_playlists") {
 	disabled(false)
 	concurrentBuild(false)
 	steps {
-		shell("/bin/bash start_cron.sh")
+		shell("/usr/bin/python3 week_playlist.py")
+		shell("ls -la")
 	}
 	publishers {
 		archiveArtifacts {
