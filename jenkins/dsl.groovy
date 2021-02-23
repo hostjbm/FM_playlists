@@ -1,6 +1,9 @@
 job("FM_playlists") {
 	description()
 	keepDependencies(false)
+	triggers {
+        cron('H 7 * * 1')
+    }
 	scm {
 		git {
 			remote {
